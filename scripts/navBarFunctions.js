@@ -1,3 +1,4 @@
+
 $('.navbar li').click(function() {
     years = $('.navbar li')
     for(var i = 0;i<years.length;i++){

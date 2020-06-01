@@ -1,3 +1,7 @@
 .headerTitle{
     text-align: center !important;
 }
+
+#kartaGrafBlok{
+    display: grid !important;
+}
