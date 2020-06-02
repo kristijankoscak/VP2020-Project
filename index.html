@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -39,7 +39,7 @@
                     </a>
                   
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Linijski</a>
                       <a class="dropdown-item" href="#">Another action</a>
                       <a class="dropdown-item" href="#">Something else here</a>
                     </div>
@@ -48,19 +48,15 @@
         </div>
         <div class="row" id="kartaGraf">
             <div  class="col-sm border d-flex justify-content-center">
-                <div id="zupanijaBlok" class="w-100">
+                <div id="zupanijaBlok" class="table-responsive ">
 
                 </div>
             </div>
             <div  class="col-sm border d-flex justify-content-center ">
-                <div id="grafBlok" class="w-100">
+                <div id="grafBlok" class="table-responsive ">
 
                 </div>
             </div>
-        </div>
-        <div class="row bg-danger" id="kartaGrafBlok">
-            <div class="col-sm border">aaa</div>
-            <div class="col-sm border">bbb</div>
         </div>
 
         <div class="row">
@@ -99,6 +95,7 @@
                   </div>
             </div>
         </div>
+        <div class="row" id="spinnerBlock"></div>
         <div class="jumbotron d-flex justify-content-center">
             Made by Kristijan Koščak for Data Visualization project
         </div>
@@ -106,7 +103,8 @@
     </div>
 <script src="scripts/navBarFunctions.js"></script>
 <script src="scripts/graphFunctions.js"></script>
-<script src="scripts/examples.js"></script>
+
 <script src="scripts/tableHandler.js"></script>
+<script src="scripts/vizualizationHandler.js"></script>
 </body>
 </html>
