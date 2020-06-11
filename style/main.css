@@ -5,3 +5,8 @@
 #kartaGrafBlok{
     display: grid !important;
 }
+
+#dataPerCountieBlock{
+    margin-left:auto;
+    margin-right: auto;
+}

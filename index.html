@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -16,34 +17,32 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarsExample03">
-            <ul class="navbar-nav" id="years">
-                <li class="nav-item">
-                    <a class="nav-link" onclick="handleData(2016)">2016 </span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="handleData(2017)">2017</a>
-                </li>
-            </ul>
-        </div>
     </nav>
-    <div class="jumbotron bg-light" id="mainBG">
+    <div class="container-flex border border-danger mt-3 d-flex justify-content-center" id="years">
+        <span class="mt-1">Godina:</span>
+        <div class="dropdown show">
+            <a class="btn btn-sm dropdown-toggle" href="#" role="button" id="dropDownYearsLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Nije odabrano
+            </a>
+            <div class="dropdown-menu" id="dropDownYears" aria-labelledby="dropDownYearsLink">
+                <a class="dropdown-item" onclick="handleData(2016)">2016 </span></a>
+                <a class="dropdown-item" onclick="handleData(2017)">2017</a>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron bg-light pt-4" id="mainBG">
         <div class="row bg-secondary">
             <div class="col-sm border  d-flex justify-content-center">
-                <p class="text-center">Odaberite županiju:</p>
+                <p class="mt-1">Odaberite županiju:</p>
+                <p class="mt-1 ml-3" id="selectedCounty"></p>
             </div>
             <div class="col-sm border d-flex justify-content-center">
-                <div class="dropdown show">
-                    <a class="btn btn-secondary btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Graf nije odabran
-                    </a>
-                  
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item" href="#">Linijski</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
+                <label class="mr-2 mt-2" for="countyGraphType">Odaberite graf:</label>
+                <select class="custom-select mr-sm-2 w-50 mt-1" id="countyGraphType">
+                    <option selected>Ništa nije odabrano</option>
+                    <option value="1">Stupčasti graf</option>
+                    <option value="2">Kružni graf</option>
+                </select>
             </div>
         </div>
         <div class="row" id="kartaGraf">
@@ -58,53 +57,65 @@
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-12 border">
-                <div class="table-responsive">
-                    <table class="table table-bordered  table-hover" style="text-align: center;">
-                        <thead>
-                            <tr>
-                                <th scope="col">Županija</th>
-                                <th scope="col" colspan="3">Ukupno</th>
-                                <th scope="col" colspan="3">Oranice i vrtovi</th>
-                                <th scope="col" colspan="3">Trajni travnjaci</th>
-                                <th scope="col" colspan="3">Trajni nasadi</th>
-                            </tr>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col">U prijelanozm razdoblju</th>
-                                <th scope="col">Završno prijelazno radzoblje</th>
-                                <th scope="col">Ukupno</th>
-                                <th scope="col">U prijelanozm razdoblju</th>
-                                <th scope="col">Završno prijelazno radzoblje</th>
-                                <th scope="col">Ukupno</th>
-                                <th scope="col">U prijelanozm razdoblju</th>
-                                <th scope="col">Završno prijelazno radzoblje</th>
-                                <th scope="col">Ukupno</th>
-                                <th scope="col">U prijelanozm razdoblju</th>
-                                <th scope="col">Završno prijelazno radzoblje</th>
-                                <th scope="col">Ukupno</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="tableData">
-
-                        </tbody>
-                    </table>
-                  </div>
-            </div>
+        <div class="container-flex" id="buttons">
+            <span>Prikaz po županijama</span>
+            <button id="btnShowTable" onclick="showTable()" disabled>Tablica</button>
+            <button id="btnShowGraph" onclick="showGraph()" disabled>Graf</button>
         </div>
         <div class="row" id="spinnerBlock"></div>
+        <div id="detailedDataBlock">
+
+            <div class="row" id="countiesGraphBlock" >
+                <div id="countiesGraph" class="table-responsive "></div>
+            </div>
+
+            <div class="row" id="tableDataPerCountie" >
+                <div class="col-12 border">
+                    <div class="table-responsive">
+                        <table class="table table-bordered  table-hover" style="text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Županija</th>
+                                    <th scope="col" colspan="3">Ukupno</th>
+                                    <th scope="col" colspan="3">Oranice i vrtovi</th>
+                                    <th scope="col" colspan="3">Trajni travnjaci</th>
+                                    <th scope="col" colspan="3">Trajni nasadi</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">U prijelaznom razdoblju</th>
+                                    <th scope="col">Završno prijelazno radzoblje</th>
+                                    <th scope="col">Ukupno</th>
+                                    <th scope="col">U prijelanozm razdoblju</th>
+                                    <th scope="col">Završno prijelazno radzoblje</th>
+                                    <th scope="col">Ukupno</th>
+                                    <th scope="col">U prijelanozm razdoblju</th>
+                                    <th scope="col">Završno prijelazno radzoblje</th>
+                                    <th scope="col">Ukupno</th>
+                                    <th scope="col">U prijelanozm razdoblju</th>
+                                    <th scope="col">Završno prijelazno radzoblje</th>
+                                    <th scope="col">Ukupno</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tableData">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="jumbotron d-flex justify-content-center">
             Made by Kristijan Koščak for Data Visualization project
         </div>
         
     </div>
-<script src="scripts/navBarFunctions.js"></script>
-<script src="scripts/graphFunctions.js"></script>
 
 <script src="scripts/tableHandler.js"></script>
 <script src="scripts/vizualizationHandler.js"></script>
+<script src="scripts/clickHandler.js"></script>
+<script src="scripts/spinnerHandler.js"></script>
+<script src="scripts/mapHandler.js"></script>
 </body>
 </html>
