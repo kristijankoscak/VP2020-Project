@@ -8,7 +8,7 @@ var subValues2
 var subValuesTotal 
 var tempArray
 var detailValuesType = ["Ukupno","Oranice i vrtovi","Trajni travnjaci","Trajni nasadi"]
-var subValuesType = ["U prijelaznom razdoblju","Završno prijelazno razdoblje"]
+var subValuesType = ["U prijelaznom razdoblju","Završeno prijelazno razdoblje"]
 
 function handleGraphData(id){
     detailValues = []
