@@ -2,7 +2,6 @@ var countyValues = []
 var countyNames = []
 function handleData(year){
     $.getJSON(getPath(year), function(json) {
-        /* console.log(Object.values(json.value)) */
         var counties = Object.values(json.zupanije)
         var unformatedValues = Object.values(json.value)
         var formatedValues = formatData(unformatedValues)
@@ -42,7 +41,6 @@ function formatData(data){
 }
 
 function fillTable(counties,values){
-    /* $("#tableData").empty(); */
     for(var i = 0; i< counties.length ; i++){
         var element =   "<tr><th>"+counties[i]+"</th>"+
                         "<td>"+ values[i][0]+"</td>"+

@@ -436,7 +436,6 @@ function addShortBarPlot(){
         .call(xAxis)
         .selectAll("text")
         .attr("transform", "rotate(-50),translate(-10,-10)")
-        //.attr("transform", "translate(0,0)")
         .style("text-anchor", "end")
     graph.append("g")
         .attr("class", "y axis")
