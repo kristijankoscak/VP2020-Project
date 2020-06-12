@@ -18,10 +18,10 @@
             <span class="navbar-toggler-icon"></span>
         </button>
     </nav>
-    <div class="container-flex border border-danger mt-3 d-flex justify-content-center" id="years">
-        <span class="mt-1">Godina:</span>
+    <div class="jumobtron mt-3 ml-3 mr-3 d-flex justify-content-center" id="years">
+        <b><p class="mt-1">Godina:</p></b>
         <div class="dropdown show">
-            <a class="btn btn-sm dropdown-toggle" href="#" role="button" id="dropDownYearsLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="btn bg-info btn-sm ml-2 dropdown-toggle" role="button" id="dropDownYearsLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:white">
                 Nije odabrano
             </a>
             <div class="dropdown-menu" id="dropDownYears" aria-labelledby="dropDownYearsLink">
@@ -30,16 +30,15 @@
             </div>
         </div>
     </div>
-    <div class="jumbotron bg-light pt-4" id="mainBG">
-        <div class="row bg-secondary">
-            <div class="col-sm border  d-flex justify-content-center">
-                <p class="mt-1">Odaberite županiju:</p>
-                <p class="mt-1 ml-3" id="selectedCounty"></p>
+    <div class="jumbotron bg-white pt-4 pb-2 mb-0" id="mainBG">
+        <div class="row bg-secondary ">
+            <div class="col-sm border d-flex justify-content-center">
+                <b><p class="mt-2" style="color:white">Odaberite županiju:</p></b>
+                <p class="mt-2 ml-3" id="selectedCounty" style="color:white"></p>
             </div>
             <div class="col-sm border d-flex justify-content-center">
-                <label class="mr-2 mt-2" for="countyGraphType">Odaberite graf:</label>
+                <b><label class="mr-2 mt-2" for="countyGraphType" style="color:white">Odaberite graf:</label></b>
                 <select class="custom-select mr-sm-2 w-50 mt-1" id="countyGraphType">
-                    <option selected>Ništa nije odabrano</option>
                     <option value="1">Stupčasti graf</option>
                     <option value="2">Kružni graf</option>
                 </select>
@@ -57,20 +56,18 @@
                 </div>
             </div>
         </div>
-        <div class="container-flex" id="buttons">
-            <span>Prikaz po županijama</span>
-            <button id="btnShowTable" onclick="showTable()" disabled>Tablica</button>
-            <button id="btnShowGraph" onclick="showGraph()" disabled>Graf</button>
+        <div class="row bg-secondary" id="buttons">
+            <span class="mt-2" style="color:white"><b>Prikaz po županijama:</b></span>
+            <button class="btn btn-outline-light ml-2" id="btnShowTable" onclick="showTable()" disabled>Tablica</button>
+            <button class="btn btn-outline-light ml-2" id="btnShowGraph" onclick="showGraph()" disabled>Graf</button>
         </div>
         <div class="row" id="spinnerBlock"></div>
-        <div id="detailedDataBlock">
-
-            <div class="row" id="countiesGraphBlock" >
-                <div id="countiesGraph" class="table-responsive "></div>
+        <div class="row border" id="detailedDataBlock">
+            <div class="col-sm" id="countiesGraphBlock">
+                <div id="countiesGraph" class="table-responsive" align="center"></div>
             </div>
-
-            <div class="row" id="tableDataPerCountie" >
-                <div class="col-12 border">
+            <div class="col-sm" id="tableDataPerCountie" >
+                <div class="col-12">
                     <div class="table-responsive">
                         <table class="table table-bordered  table-hover" style="text-align: center;">
                             <thead>
@@ -106,8 +103,10 @@
                 </div>
             </div>
         </div>
-        <div class="jumbotron d-flex justify-content-center">
-            Made by Kristijan Koščak for Data Visualization project
+        <div class="row p-2 bg-secondary d-flex justify-content-center rounded-bottom" style="color:white">
+            Kolegij: Vizualizacija podataka <br>
+            Student: Kristijan Koščak<br>
+            Osijek,2020
         </div>
         
     </div>

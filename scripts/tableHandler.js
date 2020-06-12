@@ -9,7 +9,6 @@ function handleData(year){
         $("#tableData").empty();
         saveData(formatedValues,counties)
         fillTable(counties,formatedValues)
-        addShortBarPlot(countyValues,counties)
     }); 
     
 }

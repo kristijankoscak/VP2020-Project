@@ -15,18 +15,23 @@ function showTable(){
     var randNumber = Math.round(Math.random() * 5)
     hideDetailedData()
     loading(randNumber)
+    setDisabled()
     setTimeout(() => {
         d3.select("#spinnerBlock").select("svg").remove()
         $("#tableDataPerCountie").show()
+        removeDisabled()
     },(1500+randNumber*1500));
 }
 function showGraph(){
     var randNumber = Math.round(Math.random() * 5)
     hideDetailedData()
     loading(randNumber)
+    setDisabled()
     setTimeout(() => {
         d3.select("#spinnerBlock").select("svg").remove()
         $("#countiesGraphBlock").show()
+        removeDisabled()
+        addShortBarPlot()
     },(1500+randNumber*1500));
 }
 
@@ -55,11 +60,14 @@ function checkCountyGraphType(){
 }
 
 $("#countyGraphType").change(function() {
-    console.log($("#countyGraphType :selected").text())
     checkCountyGraphType()
 });
 
 function removeDisabled(){
     $("#btnShowTable").removeAttr("disabled")
     $("#btnShowGraph").removeAttr("disabled")
+}
+function setDisabled(){
+    $("#btnShowTable").attr("disabled",true)
+    $("#btnShowGraph").attr("disabled",true) 
 }

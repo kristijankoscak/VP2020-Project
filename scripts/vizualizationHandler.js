@@ -46,12 +46,11 @@ function addMap(){
     map.append("svg")
         .attr("width",mainWidth)
         .attr("height",mainHeight)
-        .style("background","lightblue")
+        .style("background","none")
 
 }
 
 // ============================================
-
 function addPieChart(){
     let totalValue = subValuesTotal[0]
     let values = []
@@ -68,7 +67,6 @@ function addPieChart(){
     let margin = {top: 20, bottom: 150};
     let height = mainHeight - margin.top - margin.bottom;
 
-    console.log(valuesType)
     let color = d3.scale.ordinal()
         .domain(valuesType)
         .range(['#c93455','#b3ad36','#bd5c33'])
@@ -85,7 +83,7 @@ function addPieChart(){
         .attr("id","pieChartSVG")
         .attr("width",mainWidth)
         .attr("height",mainHeight)
-        .style("background","lightblue")
+        .style("background","none")
     
     let pieArcs = pieChartSVG.selectAll("g.pie")
         .data(pie(values))
@@ -121,29 +119,46 @@ function addPieChart(){
             .attr("height",10)
             .attr("width",10)
             .attr("fill",function(d){return color(d)})
-    pieChartSVG.selectAll("g.const").data(valuesType)
+    pieChartSVG.selectAll("g.const")
+        .data(valuesType)
         .enter()
         .append("g")
         .attr("transform",function(d,i){return "translate(100,"+(height+40+20*i)+")"})
             .append("text")
             .style("text-anchor", "center")
             .text(function(d){return d})
-}
+    var pieInfo =  d3.select("#grafBlok")
+        .append("div")
+        .attr("id","pieInfo")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px")
+} 
+
+
 function mouseOverPie(d,i){
     d3.select(this)
         .attr("fill-opacity",0.5)
-}
+    d3.select("#pieInfo").style("opacity",1)
+}   
 function mouseClickPie(d,i){
     addDonutChart(i+1)
 }
 function mouseMovePie(d,i){
-
-    }
+    d3.select("#pieInfo")
+        .html(d.data+" ha")
+        .style("left", (d3.mouse(this)[0]+300) + "px")
+        .style("top", (d3.mouse(this)[1]+200) + "px")
+}
 function mouseOutPie(d,i){
     d3.select(this)
         .attr("fill-opacity",1)
+    d3.select("#pieInfo").style("opacity",0)
 }
-
 // ============================================
 
 function addDonutChart(id){
@@ -157,15 +172,17 @@ function addDonutChart(id){
     values.push(subValues1[id])
     values.push(subValues2[id])
 
-    console.log(values)
-
     let color = d3.scale.ordinal()
         .domain(subValuesType)
         .range(['#4daf4a','#377eb8'])
 
     let arc = d3.svg.arc()
         .innerRadius(155)
+        .outerRadius(155);
+    let arc1 = d3.svg.arc()
+        .innerRadius(155)
         .outerRadius(180);
+
 
     let pie = d3.layout.pie()
         .value(function(d) { return d; });
@@ -204,6 +221,11 @@ function addDonutChart(id){
             .append("text")
             .style("text-anchor", "center")
             .text(function(d){return d})
+    
+    pieArcs.selectAll("path")
+        .transition()
+        .duration(200)
+        .attr("d",arc1)
 }
 
 // ============================================
@@ -244,7 +266,7 @@ function addDetailedBarPlot(){
         .attr("width",mainWidth)
         .attr("height",mainHeight)
         .attr("stroke","none")
-        .style("background","lightblue")
+        .style("background","none")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top +")")
         .attr("background","gray")
@@ -266,35 +288,58 @@ function addDetailedBarPlot(){
         .style("text-anchor", "start")
         .text("ha");
 
-
     let barchartLower = barPlotSVG.selectAll("rect")
         .data(subValues1)
         .enter()
         .append("rect")
         .attr("x", function(d, i) { return x(i); })
-        .attr("y", function(d) {return height-y0(d)}) 
-        .attr("height", function(d) { return y0(d) })
+        .attr("height", function(d) { return height-y(0) })
+        .attr("y", function(d) {return y(0)})
         .attr("width", barWidth)
         .attr("fill", color(subValuesType[0]))
+        .on("mouseover",mouseOverBarPlot)
+        .on("mousemove",mouseMoveBarPlot)
+        .on("mouseout",mouseOutBarPlot)
     
     let barchartUpper = barPlotSVG.selectAll("rect.const")
         .data(subValues2)
         .enter()
         .append("rect")
         .attr("x", function(d, i) { return x(i); })
-        .attr("y", function(d,i) {return height-y0(subValues1[i])-y0(d)}) 
-        .attr("height", function(d) { return y0(d) })
+        .attr("height", function(d,i) { return height-y(0)})
+        .attr("y", function(d,i) {return y(subValues1[i])}) 
         .attr("width", barWidth)
         .attr("fill", color(subValuesType[1]))
+        .on("mouseover",mouseOverBarPlot)
+        .on("mousemove",mouseMoveBarPlot)
+        .on("mouseout",mouseOutBarPlot)
+    barPlotSVG.selectAll("rect")
+        .transition()
+        .duration(800)
+        .attr("y", function(d,i) { 
+            if(i>3){
+                return y(d+subValues1[i-4])
+            }
+            else{
+                return y(d)
+            } 
+        })
+        .attr("height", function(d){return height - y(d)})
+        .delay(function(d,i){
+            if(i>=3) {
+                return(i*200)
+            } 
+            else{return(i*100)}
+        })
 
 
     let totalValue = barPlotSVG.selectAll("g.const")
         .data([0,1,2,3])
         .enter()   
         .append("g") 
-        .attr("transform", function(d,i){return ("translate("+(x(i)+80)+","+(height-y0(subValues1[i])-y0(subValues2[i])-5)+")")})
+        .attr("transform", function(d,i){return ("translate("+(x(i)+barWidth)+","+(height-y0(subValues1[i])-y0(subValues2[i])-5)+")")})
             .append("text")
-            .style("text-anchor", "center")
+            .style("text-anchor", "end")
             .text(function(d){return (subValues1[d]+subValues2[d])})
 
     let barplotLegend = barPlotSVG.selectAll("g.const")
@@ -306,31 +351,55 @@ function addDetailedBarPlot(){
             .attr("height",10)
             .attr("width",10)
             .attr("fill",function(d){return color(d)})
-        barPlotSVG.selectAll("g.const")
-        .data(subValuesType)
-        .enter()
-        .append("g")
-        .attr("transform",function(d,i){return "translate(100,"+(height+60+50*i)+")"})
-            .append("text")
-            .style("text-anchor", "center")
-            .text(function(d){return d})
+    barPlotSVG.selectAll("g.const")
+    .data(subValuesType)
+    .enter()
+    .append("g")
+    .attr("transform",function(d,i){return "translate(100,"+(height+60+50*i)+")"})
+        .append("text")
+        .style("text-anchor", "center")
+        .text(function(d){return d})
 
+    var barInfo =  d3.select("#grafBlok")
+        .append("div")
+        .attr("id","barInfo")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px")
+} 
+    
+    
+function mouseOverBarPlot(d,i){
+    d3.select(this)
+        .attr("fill-opacity",0.5)
+    d3.select("#barInfo").style("opacity",1)
+}   
+function mouseMoveBarPlot(d,i){
+    d3.select("#barInfo")
+        .html(d+" ha")
+        .style("left", (d3.mouse(this)[0]) + "px")
+        .style("top", (d3.mouse(this)[1]) + "px")
+}
+function mouseOutBarPlot(d,i){
+    d3.select(this)
+        .attr("fill-opacity",1)
+    d3.select("#barInfo").style("opacity",0)
 }
 
 // ============================================
 
-function addShortBarPlot(countyData,counties){
+function addShortBarPlot(){
     let middleValue = 0;
-    let middleValueArray = []
     $("#countiesGraph").empty();
     let data = []
-    countyData.forEach(element => {
+    countyValues.forEach(element => {
         data.push(element[2])
         middleValue+=element[2]
     });
-    for(var i=0;i<21;i++){
-        middleValueArray.push(middleValue/21)
-    }
     let margin = {top: 20, bottom: 150, left:60, right: 20};
     let width =  mainWidth - margin.left - margin.right;
     let height = mainHeight - margin.top - margin.bottom;
@@ -343,23 +412,20 @@ function addShortBarPlot(countyData,counties){
     let y = d3.scale.linear()
         .domain([0, d3.max(data)+2000])
         .range([height,0]);
-    let valueline = d3.svg.line()
-        .interpolate("linear")
-        .x(function(d, i) { return x(i); })
-        .y(function(d) { return y(d); })
 
     let graph = d3.select("#countiesGraph")
         .append("svg")
+        .attr("id","shortBarPlot")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.bottom + margin.top)
-        .style("background-color", "lightblue")
+        .style("background-color", "none")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top +")");
 
     let xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom")
-        .tickFormat(function(d, i) {return counties[i] });
+        .tickFormat(function(d, i) {return countyNames[i] });
     let yAxis = d3.svg.axis()
         .scale(y)
         .orient("left")
@@ -387,42 +453,61 @@ function addShortBarPlot(countyData,counties){
         .enter()
         .append("rect")
         .attr("x", function(d, i) { return x(i); })
-        .attr("y", y) 
-        .attr("height", function(d) { return height - y(d); })
+        .attr("height", function(d) { return height-y(0) })
+        .attr("y", function(d) {return y(0)})
         .attr("width", barWidth)
-        .attr("fill", "green")
-        .on("mouseover",handleMouseOver)
-        .on("mouseout",handleMouseOut)
-    let linechart = graph.append("path")
-        .attr("class", "line")
-        .attr("d", valueline(middleValueArray))
-        .attr("fill","none")
-        .style("stroke", "black");
+        .attr("fill", "#4daf4a")
+        .on("mouseover",mouseOverShortBP)
+        .on("mousemove",mouseMoveShortBP)
+        .on("mouseout",mouseOutShortBP)
+
+    let linechart = graph.append("line")
+        .attr("id",middleValue)
+        .style("stroke", "black")
+        .attr("x1", 0)
+        .attr("y1", y(middleValue/21))
+        .attr("x2", width)
+        .attr("y2", y(middleValue/21))
+    let middleValueText = graph.append("g")
+        .append("text")
+        .attr("transform", "translate("+width+","+(y(Math.round(middleValue/21))-10)+")")
+        .style("text-anchor", "end")
+        .text(Math.round(middleValue/21)+" ha");
+
+    var barInfo =  d3.select("#countiesGraph")
+        .append("div")
+        .attr("id","barInfoLower")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px")
+
+    graph.selectAll("rect")
+        .transition()
+        .duration(800)
+        .attr("y", function(d,i) {return y(d)})
+        .attr("height", function(d){return height - y(d)})
+        .delay(function(d,i){return(i*100)})
 }
-
-function handleMouseOver(d,i){
-    var mouseCords = d3.mouse(this)
-    var x = mouseCords[0]+80
-    var y = mouseCords[1]+20
-    if (i>18){x = mouseCords[0]-20}
-
+function mouseOverShortBP(d,i){
     d3.select(this)
         .attr("fill-opacity",0.5)
-
-    var graphSvg = d3.select("#countiesGraph").select("svg")
-    var gElement = graphSvg.append("g")
-        .attr("class", "y axis")    
-        .attr("id","countyInfo")
-        .style("stroke","black")   
-    var text = gElement.append("text")
-        .attr("x",x)
-        .attr("y",y)
-        .text(d + " ha")
+    d3.select("#barInfoLower").style("opacity",1)
+}   
+function mouseMoveShortBP(d,i){
+    let offset = $("#countiesGraph").width()
+    d3.select("#barInfoLower")
+        .html(d+" ha")
+        .style("left", (d3.mouse(this)[0]+offset/4) + "px")
+        .style("top", (d3.mouse(this)[1]) + "px")
 }
-function handleMouseOut(d,i){
+function mouseOutShortBP(d,i){
     d3.select(this)
         .attr("fill-opacity",1)
-    d3.select("#countyInfo").remove()
+    d3.select("#barInfoLower").style("opacity",0)
 }
 
 

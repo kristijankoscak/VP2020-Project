@@ -32,9 +32,9 @@ function loading(randNumber){
 }
 function animateDots(circle1,circle2,circle3,iterrations){
     for(var i = 0;i<iterrations;i++){
-        setTimeout(() => {animate(circle1)},(500+i*1500));
-        setTimeout(() => {animate(circle2)},(1000+i*1500));   
-        setTimeout(() => {animate(circle3)},(1500+i*1500));  
+        setTimeout(() => {animate(circle1)},(0+i*1500));
+        setTimeout(() => {animate(circle2)},(500+i*1500));   
+        setTimeout(() => {animate(circle3)},(1000+i*1500));  
     }
 }
 function animate(circle){
