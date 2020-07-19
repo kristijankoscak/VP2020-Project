@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ekološka poljoprivreda</title>
+    <title>Površina ekološki korištenoga poljoprivrednog zemljišta po županijama</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -13,7 +14,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Ekološka poljoprivreda</a>
+        <a class="navbar-brand" href="#">Površina ekološki korištenoga poljoprivrednog zemljišta po županijama</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -60,6 +61,13 @@
             <span class="mt-2" style="color:white"><b>Prikaz po županijama:</b></span>
             <button class="btn btn-outline-light ml-2" id="btnShowTable" onclick="showTable()" disabled>Tablica</button>
             <button class="btn btn-outline-light ml-2" id="btnShowGraph" onclick="showGraph()" disabled>Graf</button>
+            <button disabled class="btn btn-outline-light dropdown-toggle ml-2" type="button" id="btnFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-filter" style="font-size:24px"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <button class="dropdown-item" type="button">Sortiraj po abecednom redu</button>
+                <button class="dropdown-item" type="button">Sortiraj po količini zemljišta</button>
+            </div>
         </div>
         <div class="row" id="spinnerBlock"></div>
         <div class="row border" id="detailedDataBlock">

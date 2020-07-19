@@ -233,7 +233,7 @@ function addDetailedBarPlot(){
     $("#grafBlok").empty();
 
     let margin = {top: 20, bottom: 150, left:70, right: 20};
-    let width =  mainWidth - margin.left - margin.right;
+    let width =  mainWidth - margin.left - margin.right
     let height = mainHeight - margin.top - margin.bottom;
     let barPadding = 4;
     let barWidth = width / 4 - barPadding;
@@ -273,17 +273,31 @@ function addDetailedBarPlot(){
         
     barPlotSVG.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + (height) + ")")
+        .attr("fill","none")
+        .attr("stroke","black")
+        .attr("stroke-width",2)
+        .attr("transform", "translate(-1," + (height+1) + ")")
         .call(xAxis)
         .selectAll("text")
         .attr("transform", "translate(0,0)")
+        .attr("stroke","none")
+        .attr("fill","black")
         .style("text-anchor", "center")
     barPlotSVG.append("g")
         .attr("class", "y axis")
-        .attr("transform", "translate(0,6)")
+        .attr("fill","none")
+        .attr("stroke","black")
+        .attr("stroke-width",2)
+        .attr("transform", "translate(-1,1)")
         .call(yAxis)
+        .selectAll("text")
+        .attr("transform", "translate(0,0)")
+        .attr("stroke","none")
+        .attr("fill","black")
         .append("text")
         .attr("transform", "rotate(0),translate(0,-20)")
+        .attr("stroke","none")
+        .attr("fill","black")
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "start")
@@ -393,7 +407,7 @@ function mouseOutBarPlot(d,i){
 
 // ============================================
 
-function addShortBarPlot(){
+function addShortBarPlot(sortedValues=null,sortedNames = null){
     let middleValue = 0;
     $("#countiesGraph").empty();
     let data = []
@@ -401,9 +415,9 @@ function addShortBarPlot(){
         data.push(element[2])
         middleValue+=element[2]
     });
-    let margin = {top: 20, bottom: 150, left:60, right: 20};
+    let margin = {top: 20, bottom: 200, left:60, right: 20};
     let width =  mainWidth - margin.left - margin.right;
-    let height = mainHeight - margin.top - margin.bottom;
+    let height = mainHeight+50 - margin.top - margin.bottom;
     let barPadding = 4;
     let barWidth = width / 21 - barPadding;
 
@@ -422,33 +436,54 @@ function addShortBarPlot(){
         .style("background-color", "none")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top +")");
-
-    let xAxis = d3.svg.axis()
+    let xAxis
+    if(sortedNames!=null){
+        xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom")
-        .tickFormat(function(d, i) {return countyNames[i] });
+        .tickFormat(function(d, i) {return sortedNames[i] });
+    }
+    else{
+        xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .tickFormat(function(d, i) {return countyNames[i] });
+    }
     let yAxis = d3.svg.axis()
         .scale(y)
         .orient("left")
         .ticks(8);
     graph.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + (height) + ")")
+        .attr("fill","none")
+        .attr("stroke","black")
+        .attr("stroke-width",2)
+        .attr("transform", "translate(-1," + (height+1) + ")")
         .call(xAxis)
         .selectAll("text")
-        .attr("transform", "rotate(-50),translate(-10,-10)")
+        .attr("fill","black")
+        .attr("stroke","none")
+        .attr("transform", "rotate(-65),translate(-10,-10)")
         .style("text-anchor", "end")
     graph.append("g")
         .attr("class", "y axis")
-        .attr("transform", "translate(0,6)")
+        .attr("fill","none")
+        .attr("stroke","black")
+        .attr("stroke-width",2)
+        .attr("transform", "translate(-1,1)")
         .call(yAxis)
+        .selectAll("text")
+        .attr("fill","black")
+        .attr("stroke","none")
         .append("text")
+        .attr("fill","black")
+        .attr("stroke","none")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Hektara");
-
+    if(sortedValues!=null){data = sortedValues}
     let barchart = graph.selectAll("rect")
         .data(data)
         .enter()

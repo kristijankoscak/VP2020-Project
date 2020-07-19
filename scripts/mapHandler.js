@@ -3,7 +3,7 @@
 function drawMap(){
 
     var projection = d3.geo.mercator()
-         .center([0, 10])
+        .center([0, 10])
         .scale(6000)
         .translate([17470, 4480]) 
         .rotate([-180, 0]);
@@ -20,7 +20,7 @@ function drawMap(){
             .attr("class", "county")
             .attr("id", function(d) { return d.id; })
             .attr("d", path) .style("fill", "gray")
-            .style("stroke", "black")
+            .style("stroke", "white")
             .style("stroke-width", 1)
             .style("stroke-opacity", 1)
             .on("mouseover",handleMouseOverCounty)
@@ -28,20 +28,31 @@ function drawMap(){
             .on("click",handleMouseClickOverCounty)
     });
 }
+var isClicked = false;
 function handleMouseOverCounty(d,i){
+    if(isClicked == true){
+        isClicked = !isClicked
+    }
     d3.select(this)
-        .style("fill", "white")
-        .attr("fill-opacity",0.5)
+        .style("fill", "gray")
+        .attr("fill-opacity",0.7)
     d3.select("#selectedCounty").html("")
     d3.select("#selectedCounty").html(countyNames[d.id])
 }
 
 function handleMouseOutCounty(d,i){
-    d3.select(this)
-        .style("fill", "gray")
-        .attr("fill-opacity",1)
+    if(isClicked == false){
+        d3.select(this)
+            .style("fill", "gray")
+            .attr("fill-opacity",1)
+    }
 }
 function handleMouseClickOverCounty(d,i){
+    isClicked = !isClicked
+    removeChosen()
+    d3.select(this)
+        .style("fill", "gray")
+        .attr("fill-opacity",0.5)
     //d.id - ID clicked county
     $("#countyGraphType").show()
     $("#countyGraphType option[value=1]").attr("selected","selected")
@@ -49,3 +60,9 @@ function handleMouseClickOverCounty(d,i){
     handleGraphData(d.id)
     checkCountyGraphType()
 }
+function removeChosen(){
+    d3.selectAll("path.county")
+        .style("fill", "gray")
+        .attr("fill-opacity",1)
+}
+

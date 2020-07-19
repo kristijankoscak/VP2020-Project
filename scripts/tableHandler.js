@@ -11,6 +11,59 @@ function handleData(year){
     }); 
     
 }
+var valuesBySize
+var countiesNameBySize
+function sortByValue(){
+    var originalValues = []
+    for(var i = 0; i < countyValues.length;i++){
+        originalValues.push(countyValues[i])
+    }
+    var temp = []
+    for(var i =0; i<countyValues.length;i++){
+        temp.push(originalValues[i][2])
+    }
+    temp.sort(function(a,b){return b-a})
+    console.log(temp)
+    console.log(originalValues)
+    console.log(originalValues.length)
+    valuesBySize = []
+    countiesNameBySize = []
+    for(var i = 0 ;i<temp.length;i++){          //  loop through biggest nummbers
+        for(var j = 0 ;j<temp.length;j++){      //  loop through array of arrays
+            console.log(originalValues[j].includes(temp[i]))
+            if(originalValues[j][2]== temp[i]){
+                valuesBySize.push(originalValues[j])
+                countiesNameBySize.push(countyNames[j])
+            }
+        }
+    }
+    $("#tableData").empty();
+    fillTable(countiesNameBySize,valuesBySize)
+    console.log(countiesNameBySize)
+    console.log(valuesBySize)
+}
+
+var countiesByAlphabet
+var valuesByAlphabet 
+function sortByAlphabet(){
+    valuesByAlphabet = []
+    var originalCountyNames = []
+    for(var i = 0; i < countyNames.length;i++){
+        originalCountyNames.push(countyNames[i])
+    }
+    countiesByAlphabet = letterSort("cro",originalCountyNames)
+    for(var i=0;i<countiesByAlphabet.length;i++){
+        var countyID = countyNames.indexOf(countiesByAlphabet[i])
+        console.log(countyID)
+        valuesByAlphabet.push(countyValues[countyID])
+    }
+    $("#tableData").empty();
+    fillTable(countiesByAlphabet,valuesByAlphabet)
+}
+function letterSort(lang, letters) {
+    letters.sort(new Intl.Collator(lang).compare);
+    return letters;
+}
 
 function saveData(dataValues,dataNames){
     countyValues = dataValues
@@ -42,7 +95,7 @@ function formatData(data){
 
 function fillTable(counties,values){
     for(var i = 0; i< counties.length ; i++){
-        var element =   "<tr><th>"+counties[i]+"</th>"+
+        var element =   "<tr class=tableCounty id="+countyNames.indexOf(counties[i])+"><th>"+counties[i]+"</th>"+
                         "<td>"+ values[i][0]+"</td>"+
                         "<td>"+ values[i][1] +"</td>"+
                         "<td>"+ values[i][2] +"</td>"+
